@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>dmapper.keycloak</groupId>
 	<artifactId>group-ids-token-converter</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<properties>
 		<keycloak.version>26.3.4</keycloak.version>
 	</properties>
