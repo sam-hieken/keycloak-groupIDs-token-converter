@@ -11,7 +11,6 @@ import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.ProtocolMapperModel;
 import org.keycloak.models.UserModel;
 import org.keycloak.models.UserSessionModel;
-import org.keycloak.protocol.ProtocolMapperUtils;
 import org.keycloak.protocol.oidc.OIDCLoginProtocol;
 import org.keycloak.protocol.oidc.mappers.AbstractOIDCProtocolMapper;
 import org.keycloak.protocol.oidc.mappers.OIDCAccessTokenMapper;
@@ -32,27 +31,47 @@ public class GroupIDTokenMapper extends AbstractOIDCProtocolMapper
 		OIDCAttributeMapperHelper.addIncludeInTokensConfig(configProperties, GroupIDTokenMapper.class);
 	}
 
-	public static ProtocolMapperModel create(String name, boolean accessToken, boolean idToken, boolean userInfo) {
-		final ProtocolMapperModel mapper = new ProtocolMapperModel();
-		mapper.setName(name);
-		mapper.setProtocolMapper(PROVIDER_ID);
-		mapper.setProtocol(OIDCLoginProtocol.LOGIN_PROTOCOL);
-		
-		final Map<String, String> config = new HashMap<>();
-		config.put(ProtocolMapperUtils.MULTIVALUED, Boolean.TRUE.toString()); // Set the MULTIVALUED config
-		
-		if (accessToken) 
-			config.put(OIDCAttributeMapperHelper.INCLUDE_IN_ACCESS_TOKEN, "true");
-		
-		if (idToken) 
-			config.put(OIDCAttributeMapperHelper.INCLUDE_IN_ID_TOKEN, "true");
-		
-		if (userInfo) 
-			config.put(OIDCAttributeMapperHelper.INCLUDE_IN_USERINFO, "true");
-		
-		mapper.setConfig(config);
-		return mapper;
-	}
+//	public static ProtocolMapperModel create(String name, boolean accessToken, boolean idToken, boolean userInfo) {
+//		final ProtocolMapperModel mapper = new ProtocolMapperModel();
+//		mapper.setName(name);
+//		mapper.setProtocolMapper(PROVIDER_ID);
+//		mapper.setProtocol(OIDCLoginProtocol.LOGIN_PROTOCOL);
+//		
+//		final Map<String, String> config = new HashMap<>();
+//		config.put(ProtocolMapperUtils.MULTIVALUED, Boolean.TRUE.toString()); // Set the MULTIVALUED config
+//		
+//		if (accessToken) 
+//			config.put(OIDCAttributeMapperHelper.INCLUDE_IN_ACCESS_TOKEN, "true");
+//		
+//		if (idToken) 
+//			config.put(OIDCAttributeMapperHelper.INCLUDE_IN_ID_TOKEN, "true");
+//		
+//		if (userInfo) 
+//			config.put(OIDCAttributeMapperHelper.INCLUDE_IN_USERINFO, "true");
+//		
+//		mapper.setConfig(config);
+//		return mapper;
+//	}
+	
+	public static ProtocolMapperModel createClaimMapper(String name, boolean accessToken, boolean introspectionEndpoint) {
+        ProtocolMapperModel mapper = new ProtocolMapperModel();
+        mapper.setName(name);
+        mapper.setProtocolMapper(PROVIDER_ID);
+        mapper.setProtocol(OIDCLoginProtocol.LOGIN_PROTOCOL);
+        Map<String, String> config = new HashMap<>();
+        if (accessToken) {
+            config.put(OIDCAttributeMapperHelper.INCLUDE_IN_ACCESS_TOKEN, "true");
+        } else {
+            config.put(OIDCAttributeMapperHelper.INCLUDE_IN_ACCESS_TOKEN, "false");
+        }
+        if (introspectionEndpoint) {
+            config.put(OIDCAttributeMapperHelper.INCLUDE_IN_INTROSPECTION, "true");
+        } else {
+            config.put(OIDCAttributeMapperHelper.INCLUDE_IN_INTROSPECTION, "false");
+        }
+        mapper.setConfig(config);
+        return mapper;
+    }
 
 	@Override
 	protected void setClaim(IDToken token, ProtocolMapperModel mappingModel, UserSessionModel userSession,
