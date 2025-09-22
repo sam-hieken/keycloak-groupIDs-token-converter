@@ -25,7 +25,8 @@ import org.keycloak.representations.IDToken;
  * 
  * Based on https://github.com/keycloak/keycloak/blob/main/services/src/main/java/org/keycloak/protocol/oidc/mappers/GroupMembershipMapper.java
  */
-public class GroupIDTokenMapper extends AbstractOIDCProtocolMapper implements OIDCAccessTokenMapper, OIDCIDTokenMapper, UserInfoTokenMapper, TokenIntrospectionTokenMapper {
+public class GroupIDTokenMapper extends AbstractOIDCProtocolMapper 
+		implements OIDCAccessTokenMapper, OIDCIDTokenMapper, UserInfoTokenMapper, TokenIntrospectionTokenMapper {
 
     private static final List<ProviderConfigProperty> configProperties = new ArrayList<ProviderConfigProperty>();
 
@@ -48,7 +49,7 @@ public class GroupIDTokenMapper extends AbstractOIDCProtocolMapper implements OI
 
     @Override
     public String getDisplayType() {
-        return "User's Group IDs";
+        return "User Group IDs";
     }
 
     @Override
@@ -69,7 +70,7 @@ public class GroupIDTokenMapper extends AbstractOIDCProtocolMapper implements OI
      * @param userSession
      */
     protected void setClaim(IDToken token, ProtocolMapperModel mappingModel, UserSessionModel userSession) {
-        List<String> groupIDs = userSession.getUser().getGroupsStream()
+        final List<String> groupIDs = userSession.getUser().getGroupsStream()
         		.map(groups -> groups.getId())
         		.collect(Collectors.toList());
 
